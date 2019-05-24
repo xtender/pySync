@@ -6,7 +6,6 @@ import logging
 
 mlog = logging.getLogger("pySync.XTOracle")
 
-
 class XTOracle:
     def __init__(self, cfg_name):
         with Config(r'config.cfg') as cfg:
@@ -18,11 +17,12 @@ class XTOracle:
             self.tnsname  = cfg.get(cfg_name,'tnsname')
 
         try:
-            #self.db = cx_Oracle.connect(user=self.username, password=self.password, dsn=self.tnsname,mode=cx_Oracle.SYSDBA)
-            self.db = Connection(user=self.username, password=self.password, dsn=self.tnsname,mode=cx_Oracle.SYSDBA)
-        except cx_Oracle.DatabaseError as e:
-            # Log error as appropriate
+            self.db = Connection(user=self.username, password=self.password, dsn=self.tnsname, mode=cx_Oracle.SYSDBA)
+        except Exception as e:
+            mlog.critical(e, exc_info=True)
             raise
+        finally:
+            mlog.debug("Connected to {} successfully".format(self.tnsname))
 
     def __exit__(self, ctx_type, ctx_value, ctx_traceback):
         pass
@@ -35,30 +35,9 @@ class XTOracle:
             cursor.execute(sql)
         return cursor
 
-
-    #def q_select(self, sql):
-    #    cur = self.execute(sql)
-    #    names = [c[0] for c in cur.description]
-    #    cur.rowfactory = collections.namedtuple("ResultSet",names)
-    #    res = cur.fetchall()
-    #    cur.close()
-    #    return res[0]
-
     def q_select(self, sql, binds=None):
         cur = self.execute(sql, binds)
-        #try:
-        #    names = [c[0] for c in cur.description]
-        #    cur.rowfactory = collections.namedtuple("ResultSet",names)
-        #except ValueError as e:
-        #    mlog.error("Value error: {0}".format( str(e)))
-        
         return cur
-        #res = cur.fetchall()
-        #cur.close()
-        #for row in res:
-        #    print row
-        #print "============================="
-        #return res[0]
 
 
     def execute_fetch_all_y(self, sql):

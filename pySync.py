@@ -16,9 +16,6 @@ logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 logger = logging.getLogger("pySync")
 
 ####################################################
-# sleep interval:
-WAIT_TIME_SECONDS = 1
-
 # Exception for service stop
 class ServiceExit(Exception):
     pass
@@ -35,20 +32,22 @@ def testConfig():
         print cfg.get(cfg_name,'username')
 
 def sync_standby():
-    #print Primary().q_select('select 123 a, 456 b from dual').B
-    Primary().print_logs()
     Primary().archive_log_current()
-    Standby().download_all()
-    Standby().catalog_archivelogs()
+    Primary().print_logs()
+    logs_number = Standby().download_all()
+    if logs_number>0:
+        Standby().catalog_archivelogs()
+    else:
+        mlog.info("There is no new logs on Primary. Last sequence on Primary: {}".format(Primary().get_last_log()))
     Primary().print_logs()
 
 def test1():
-    res = Standby().execute_fetch_all('select level a from dual connect by level<10')
-    res = list(res)[0]
-    for result in res:
-        print result[0]
-    #result = list(res)
-    #print result
+    print Primary().q_select('select database_role from v$database').DATABASE_ROLE
+    
+    #res = Standby().q_select('select level a from dual connect by level<10')
+    #for result in res:
+    #    print result[0]
+    
 
 def test2():
     #res = Primary().get_logs()
@@ -61,6 +60,8 @@ def test2():
 
 def test3():
     print time.ctime()
+    print Standby().get_last_log()
+    print Standby().get_last_applied_log()
 
 def main():
 
@@ -70,9 +71,12 @@ def main():
     #test3()
     signal.signal(signal.SIGTERM, signal_handler)
     signal.signal(signal.SIGINT , signal_handler)
+    with Config(r'config.cfg') as cfg:
+        SYNC_CHECK_WAIT_TIME_SECONDS = cfg.getint('main', 'SYNC_CHECK_WAIT_TIME_SECONDS')
     
     try:
-        syncjob = SyncJob(interval=timedelta(seconds=WAIT_TIME_SECONDS), execute=test3)
+        #syncjob = SyncJob(interval=timedelta(seconds=SYNC_CHECK_WAIT_TIME_SECONDS), execute=test3)
+        syncjob = SyncJob(interval=timedelta(seconds=SYNC_CHECK_WAIT_TIME_SECONDS), execute=sync_standby)
         syncjob.start()
         while True:
             time.sleep(0.5)
