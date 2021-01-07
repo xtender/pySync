@@ -8,7 +8,9 @@ Simple and absolutely configurable Sync service on Python for Oracle Standard ed
 
 ## Installation
 
-Execute install.sh or
+1. Copy config.cfg.example as config.cfg and configure it with own parameters
+
+2. Execute install.sh or
 
 ```bash
 cp lib/systemd/system/pySyncOracleStandby.service /lib/systemd/system/pySyncOracleStandby.service
