@@ -4,7 +4,7 @@ from .cursor import *
 import collections
 import logging
 
-mlog = logging.getLogger("pySync.XTOracle")
+mlog = logging.getLogger("pySyncOracleStandby.XTOracle")
 
 class XTOracle:
     def __init__(self, cfg_name):

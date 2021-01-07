@@ -1,0 +1,16 @@
+[Unit]
+Description=pySyncOracleStandby Service
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+User=oracle
+Group=oinstall
+EnvironmentFile=/opt/oracle/scripts/pySyncOracleStandby/pySyncOracleStandby/env.sh
+WorkingDirectory=/opt/oracle/scripts/pySyncOracleStandby/pySyncOracleStandby
+ExecStart=/usr/bin/python -m pySyncOracleStandby
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+[main]
+SYNC_CHECK_WAIT_TIME_SECONDS = 30
+
+[primary]
+username = sys
+password = syspass
+host = primary_hostname_or_ip
+port = 1521
+service_name = primary_service_name
+tnsname = primary_tnsname
+interval = 15
+download_command = sshpass -p 'ssh_password_for_oracleuser' scp -p -P 22  oracle@primary_hostname_or_ip:{logname} {logdest}
+ssh_user = oracle
+ssh_pass = ssh_password_for_oracleuser
+ssh_port = 22
+
+[standby]
+username = sys
+password = syspass
+host = localhost
+port = 1521
+service_name = standby_service_name
+tnsname = standby_tnsname
+archivelog_dest = archivelogs_dest_folder
+catalog_command = echo "catalog start with '{archivelog_dest}' noprompt;" | rman target sys/{password}@{tnsname}

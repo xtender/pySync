@@ -13,7 +13,7 @@ from helpers.syncjob import *
 
 # logging:
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
-logger = logging.getLogger("pySync")
+logger = logging.getLogger("pySyncOracleStandby")
 
 ####################################################
 # Exception for service stop
@@ -33,12 +33,13 @@ def testConfig():
 
 def sync_standby():
     Primary().archive_log_current()
-    Primary().print_logs()
+    mlog.info("Last sequence on Primary: {}".format(Primary().get_last_log()))
+    #Primary().print_logs()
     logs_number = Standby().download_all()
     if logs_number>0:
         Standby().catalog_archivelogs()
     else:
-        mlog.info("There is no new logs on Primary. Last sequence on Primary: {}".format(Primary().get_last_log()))
+        mlog.info("There is no new logs on Primary.")
     Primary().print_logs()
 
 def test1():

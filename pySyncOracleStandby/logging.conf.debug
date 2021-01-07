@@ -1,5 +1,5 @@
 [loggers]
-keys=root,pySync,pySync.Config
+keys=root,pySync,pySync.Config,pySync.XTOracle
  
 [handlers]
 keys=fileHandler, consoleHandler
@@ -20,7 +20,12 @@ qualname=pySync
 level=INFO
 handlers=fileHandler
 qualname=pySync.Config
- 
+
+[logger_pySync.XTOracle]
+level=DEBUG
+handlers=fileHandler
+qualname=pySync.XTOracle
+
 [handler_consoleHandler]
 class=StreamHandler
 level=DEBUG

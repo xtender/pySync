@@ -1,7 +1,7 @@
 import ConfigParser
 import logging
 
-mlog = logging.getLogger("pySync.Config")
+mlog = logging.getLogger("pySyncOracleStandby.Config")
 
 class Config:
     def __init__(self, filename):

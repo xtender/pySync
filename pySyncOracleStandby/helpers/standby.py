@@ -7,7 +7,7 @@ import logging
 import os
 import subprocess
 
-mlog = logging.getLogger("pySync.Standby")
+mlog = logging.getLogger("pySyncOracleStandby.Standby")
 
 SQL_STANDBY_GET_LAST_LOG = 'sql/standby_get_last_log.sql'
 SQL_STANDBY_GET_LAST_APPLIED_LOG = 'sql/standby_get_last_applied_log.sql'
@@ -28,7 +28,7 @@ class Standby(XTOracle, object):
         mlog.debug(cmd)
         cur = self.q_select(cmd)
         res = cur.fetchone()
-        mlog.info("LAST_SEQUENCE: " + str(res.LAST_SEQUENCE))
+        mlog.info("Last sequence on Standby: {}" .format(res.LAST_SEQUENCE))
         return res.LAST_SEQUENCE
 
     def get_last_applied_log(self):

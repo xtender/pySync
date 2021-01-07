@@ -5,7 +5,7 @@ import cx_Oracle
 import collections
 import logging
 
-mlog = logging.getLogger("pySync.Primary")
+mlog = logging.getLogger("pySyncOracleStandby.Primary")
 
 SQL_ARCHIVE_LOG_CURRENT = 'sql/archive_log_current.sql'
 SQL_PRIMARY_GET_NEW_ARCHIVELOGS='sql/primary_get_new_archivelogs.sql'
