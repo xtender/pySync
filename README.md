@@ -1,5 +1,5 @@
 # pySyncOracleStandby
-Simple and absolutely configurable Sync service on Python for Oracle Standard edition standby
+Simple and fully configurable Sync service on Python for Oracle Standard edition standby
 
 ## Requirement
 
